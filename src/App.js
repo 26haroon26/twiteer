@@ -2,7 +2,6 @@ import "./App.css";
 import { useEffect, useContext } from "react";
 import { GlobalContext } from "./context/Context";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
-import loaderImg from "./img/loader.webp";
 import Home from "./components/home";
 import SignIn from "./components/signin";
 import Signup from "./components/signup";
@@ -156,18 +155,18 @@ function App() {
         </Routes>
       ) : null}
 
-      {state?.isLogin === null ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "100vh",
-          }}
-        >
-          <img width={300} src={loaderImg} alt="" />
-        </div>
-      ) : null}
+//       {state?.isLogin === null ? (
+//         <div
+//           style={{
+//             display: "flex",
+//             justifyContent: "center",
+//             alignItems: "center",
+//             minHeight: "100vh",
+//           }}
+//         >
+//           <img width={300} src={loaderImg} alt="" />
+//         </div>
+//       ) : null}
     </div>
   );
 }
