@@ -2,8 +2,9 @@ import "./App.css";
 import { useEffect, useContext } from "react";
 import { GlobalContext } from "./context/Context";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
-import loaderImg from "./img/loader.webp";
+// import loaderImg from "./img/loader.webp";
 import Home from "./components/home";
+import Profile from "./components/profile";
 import SignIn from "./components/signin";
 import Signup from "./components/signup";
 import axios from "axios";
@@ -47,7 +48,7 @@ function App() {
         dispatch({
           type: "USER_LOGOUT",
         });
-        console.log("axios error: ", error);
+        // console.log("axios error: ", error);
       }
     };
 
@@ -123,6 +124,10 @@ function App() {
             <Link to={`/`}>Home</Link>{" "}
           </li>
           <li>
+            {" "}
+            <Link to={`/profile`}>Profile</Link>{" "}
+          </li>
+          <li>
             {state?.user?.firstName} {state?.user?.lastName}
             <button onClick={logoutHandler}>Logout</button>{" "}
           </li>
@@ -144,6 +149,7 @@ function App() {
       {state?.isLogin === true ? (
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
       ) : null}
@@ -156,7 +162,7 @@ function App() {
         </Routes>
       ) : null}
 
-      {state?.isLogin === null ? (
+      {/* {state?.isLogin === null ? (
         <div
           style={{
             display: "flex",
@@ -167,7 +173,7 @@ function App() {
         >
           <img width={300} src={loaderImg} alt="" />
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

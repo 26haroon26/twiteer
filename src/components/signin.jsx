@@ -37,9 +37,11 @@ export default function SignIn() {
                 payload: response.data.profile,
               });
         setresult("signin successful")
-    } catch (err) {
-      console.log("error", err);
-      setresult(err)
+
+    } catch (error) {
+      console.log("error", error);
+      setresult(error.response.data.message)
+
     }
   };
 

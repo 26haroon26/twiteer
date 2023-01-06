@@ -1,45 +1,39 @@
-
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useContext } from "react";
+import { useState ,useContext } from "react";
 import { GlobalContext } from "../context/Context";
-import { useState } from "react";
+
+
 const theme = createTheme();
 
-export default function SignIn() {
-    let { state, dispatch } = useContext(GlobalContext);
-    const [result, setresult] = useState('')
+export default function SignUp() {
+  let { state, dispatch } = useContext(GlobalContext);
+  const [result, setresult] = useState('')
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const data = new FormData(event.currentTarget);
-      let response = await axios.post(
-        `${state.baseUrl}/login`,
-        {
-          email: data.get("email"),
-          password: data.get("password"),
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      dispatch({
-                type: "USER_LOGIN",
-                payload: response.data.profile,
-              });
-        setresult("signin successful")
+      let response = await axios.post(`${state.baseUrl}/signup`, {
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      setresult("signup successful")
     } catch (err) {
-      console.log("error", err);
-      setresult(err)
+      console.log("error", err.response.data.message);
+      setresult(err.response.data.message)
     }
   };
 
@@ -55,50 +49,76 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5">
             {result}
           </Typography>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+            </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item></Grid>
+            </Grid>
           </Box>
         </Box>
       </Container>

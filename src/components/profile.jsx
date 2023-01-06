@@ -5,8 +5,7 @@ import Search from "./search";
 import { GlobalContext } from "../context/Context";
 
 
-
-function Home() {
+function Profile() {
     let {state , dispatch} = useContext(GlobalContext);
 
   const [posttext, setposttext] = useState("");
@@ -20,7 +19,7 @@ function Home() {
   const Alltweet = async () => {
     try {
       const response = await axios
-        .get(`${state.baseUrl}/tweetFeed`)
+        .get(`${state.baseUrl}/tweets`)
         .then((response) => {
           // console.log(response.data);
           setgetData(response.data.data);
@@ -43,7 +42,7 @@ function Home() {
   };
   const DeletePost = async (post_id) => {
     try {
-      const response = await axios.delete(`${state.baseUrl}/tweet/${post_id}`,{});
+      const response = await axios.delete(`${state.baseUrl}/tweet/${post_id}`);
       setistrue(!istrue);
     } catch (err) {
       console.log("err", err);
@@ -70,7 +69,7 @@ function Home() {
   };
   useEffect(() => {
     Alltweet();
-    console.log("chal gaya");
+    console.log("profile gaya");
   }, [istrue]);
   return (
     <>
@@ -157,4 +156,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Profile;
