@@ -155,18 +155,16 @@ function App() {
         </Routes>
       ) : null}
 
-//       {state?.isLogin === null ? (
-//         <div
-//           style={{
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             minHeight: "100vh",
-//           }}
-//         >
-//           <img width={300} src={loaderImg} alt="" />
-//         </div>
-//       ) : null}
+      {state?.isLogin === null ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+        </div>
+      ) : null}
     </div>
   );
 }
