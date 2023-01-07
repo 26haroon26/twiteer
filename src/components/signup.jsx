@@ -5,13 +5,14 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useState ,useContext } from "react";
 import { GlobalContext } from "../context/Context";
+import { toast } from "react-toastify";
 
 
 const theme = createTheme();
@@ -30,10 +31,9 @@ export default function SignUp() {
         email: data.get("email"),
         password: data.get("password"),
       });
-      setresult("signup successful")
+      toast.success("signup Succesfully");
     } catch (err) {
-      console.log("error", err.response.data.message);
-      setresult(err.response.data.message)
+      toast.error(err.response.data.message)
     }
   };
 
@@ -52,8 +52,8 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
             {result}
           </Typography>
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "white",}}>
+            <TwitterIcon  color="primary"/>
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up

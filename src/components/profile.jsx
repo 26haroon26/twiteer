@@ -1,13 +1,19 @@
-import { useEffect, useState , useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import "./home.css";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
 import Search from "./search";
 import { GlobalContext } from "../context/Context";
-
+import { toast } from "react-toastify";
 
 function Profile() {
-    let {state , dispatch} = useContext(GlobalContext);
-
+  let { state, dispatch } = useContext(GlobalContext);
   const [posttext, setposttext] = useState("");
   const [getData, setgetData] = useState();
   const [istrue, setistrue] = useState(false);
@@ -37,7 +43,7 @@ function Profile() {
       });
       setistrue(!istrue);
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
   const DeletePost = async (post_id) => {
@@ -45,7 +51,7 @@ function Profile() {
       const response = await axios.delete(`${state.baseUrl}/tweet/${post_id}`);
       setistrue(!istrue);
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
   const UpdatePost = async (e) => {
@@ -64,9 +70,47 @@ function Profile() {
         editingtext: "",
       });
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    console.log("aaaaaa");
+  };
+  const change_password = async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    if (data.get("new_password") == data.get("confirm_password")) {
+      try {
+        let response = await axios.post(
+          `${state.baseUrl}/change_password`,
+          {
+            current_password: data.get("current_password"),
+            new_password: data.get("new_password"),
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        toast.success(response.data.message)
+      } catch (error) {
+        toast.error(error.response.data.message);
+        return;
+      }
+    } else {
+      toast.error("password does'nt match");
+      return;
+    }
+
+  }
   useEffect(() => {
     Alltweet();
     console.log("profile gaya");
@@ -83,7 +127,7 @@ function Profile() {
               setposttext(e.target.value);
             }}
           />
-                   <input type="submit" className="button" value="SetPost" />
+          <input type="submit" className="button" value="SetPost" />
         </form>
         <div className="body">
           <div className="flex">
@@ -112,7 +156,7 @@ function Profile() {
                             }}
                             placeholder="Please Enter Updated text"
                           />
-                                                   <input
+                          <input
                             type="submit"
                             className="button next"
                             value="Update"
@@ -152,6 +196,53 @@ function Profile() {
           <Search className="newcomponent" />
         </div>
       </div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Change Password
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        component={"form"}
+        onSubmit={change_password}
+      >
+        <DialogTitle>Change Password</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="current_password"
+            name="current_password"
+            label="Current Password"
+            type="password"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="new_password"
+            label="New Password"
+            type="password"
+            name="new_password"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="confirm_password"
+            label="Confrim Password"
+            type="password"
+            name="confirm_password"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Change</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

@@ -2,7 +2,7 @@ import { useState ,useContext} from "react";
 import "./home.css";
 import axios from "axios";
 import { GlobalContext } from "../context/Context";
-
+import { toast } from "react-toastify";
 function Search() {
     let {state , dispatch} = useContext(GlobalContext);
 
@@ -26,7 +26,7 @@ function Search() {
       console.log(response.data.data);
       setistrue(!istrue);
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message)
     }
   };
   return (

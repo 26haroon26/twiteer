@@ -8,6 +8,8 @@ import Profile from "./components/profile";
 import SignIn from "./components/signin";
 import Signup from "./components/signup";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   let { state, dispatch } = useContext(GlobalContext);
@@ -174,6 +176,18 @@ function App() {
           <img width={300} src={loaderImg} alt="" />
         </div>
       ) : null} */}
+      <ToastContainer
+       position="bottom-center"
+       autoClose={5000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover
+       theme="light"
+     />
     </div>
   );
 }

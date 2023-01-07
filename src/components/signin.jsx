@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import TwitterIcon from '@mui/icons-material/Twitter';
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -13,6 +13,8 @@ import axios from "axios";
 import { useContext } from "react";
 import { GlobalContext } from "../context/Context";
 import { useState } from "react";
+import { toast } from "react-toastify";
+
 const theme = createTheme();
 
 export default function SignIn() {
@@ -36,11 +38,10 @@ export default function SignIn() {
                 type: "USER_LOGIN",
                 payload: response.data.profile,
               });
-        setresult("signin successful")
+        // toast.success("signin successful")
 
     } catch (error) {
-      console.log("error", error);
-      setresult(error.response.data.message)
+      toast.error(error.response.data.message)
 
     }
   };
@@ -60,8 +61,8 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             {result}
           </Typography>
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "white",}}>
+            <TwitterIcon  color="primary"/>
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in

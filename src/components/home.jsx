@@ -1,13 +1,12 @@
-import { useEffect, useState , useContext} from "react";
+import { useEffect, useState, useContext } from "react";
 import "./home.css";
 import axios from "axios";
 import Search from "./search";
 import { GlobalContext } from "../context/Context";
-
-
+import { toast } from "react-toastify";
 
 function Home() {
-    let {state , dispatch} = useContext(GlobalContext);
+  let { state, dispatch } = useContext(GlobalContext);
 
   const [posttext, setposttext] = useState("");
   const [getData, setgetData] = useState();
@@ -22,7 +21,6 @@ function Home() {
       const response = await axios
         .get(`${state.baseUrl}/tweetFeed`)
         .then((response) => {
-          // console.log(response.data);
           setgetData(response.data.data);
         });
     } catch (err) {
@@ -38,15 +36,18 @@ function Home() {
       });
       setistrue(!istrue);
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
   const DeletePost = async (post_id) => {
     try {
-      const response = await axios.delete(`${state.baseUrl}/tweet/${post_id}`,{});
+      const response = await axios.delete(
+        `${state.baseUrl}/tweet/${post_id}`,
+        {}
+      );
       setistrue(!istrue);
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
   const UpdatePost = async (e) => {
@@ -65,12 +66,11 @@ function Home() {
         editingtext: "",
       });
     } catch (err) {
-      console.log("err", err);
+      toast.error(err.response.data.message);
     }
   };
   useEffect(() => {
     Alltweet();
-    console.log("chal gaya");
   }, [istrue]);
   return (
     <>
@@ -84,7 +84,7 @@ function Home() {
               setposttext(e.target.value);
             }}
           />
-                   <input type="submit" className="button" value="SetPost" />
+          <input type="submit" className="button" value="SetPost" />
         </form>
         <div className="body">
           <div className="flex">
@@ -104,7 +104,7 @@ function Home() {
                           <input
                             type="text"
                             className="input"
-                            defaultValue={Editing.editingtext}
+                            defaultValue={eachPost.text}
                             onChange={(e) => {
                               setEditing({
                                 ...Editing,
@@ -113,7 +113,7 @@ function Home() {
                             }}
                             placeholder="Please Enter Updated text"
                           />
-                                                   <input
+                          <input
                             type="submit"
                             className="button next"
                             value="Update"
