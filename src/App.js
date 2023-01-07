@@ -4,6 +4,7 @@ import { GlobalContext } from "./context/Context";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Home from "./components/home";
 import Profile from "./components/profile";
+import ForgetPassword from "./components/forgetPassword";
 import SignIn from "./components/signin";
 import Signup from "./components/signup";
 import axios from "axios";
@@ -158,7 +159,8 @@ function App() {
       {state?.isLogin === false ? (
         <Routes>
           <Route path="/" element={<SignIn />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="*" element={<Navigate to="/" replace={true} />} />
         </Routes>
       ) : null}
