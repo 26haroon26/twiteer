@@ -2,7 +2,6 @@ import "./App.css";
 import { useEffect, useContext } from "react";
 import { GlobalContext } from "./context/Context";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
-// import loaderImg from "./img/loader.webp";
 import Home from "./components/home";
 import Profile from "./components/profile";
 import SignIn from "./components/signin";
@@ -170,10 +169,8 @@ function App() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: "100vh",
           }}
         >
-          <img width={300} src={loaderImg} alt="" />
         </div>
       ) : null} */}
       <ToastContainer
