@@ -10,16 +10,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { useState ,useContext } from "react";
+import { useState, useContext } from "react";
 import { GlobalContext } from "../context/Context";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function SignUp() {
   let { state, dispatch } = useContext(GlobalContext);
-  const [result, setresult] = useState('')
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,8 +32,9 @@ export default function SignUp() {
         password: data.get("password"),
       });
       toast.success("signup Succesfully");
+      navigate("/signin");
     } catch (err) {
-      toast.error(err.response.data.message)
+      toast.error(err.response.data.message);
     }
   };
 
@@ -49,11 +50,8 @@ export default function SignUp() {
             alignItems: "center",
           }}
         >
-            <Typography component="h1" variant="h5">
-            {result}
-          </Typography>
-          <Avatar sx={{ m: 1, bgcolor: "white",}}>
-            <TwitterIcon  color="primary"/>
+          <Avatar sx={{ m: 1, bgcolor: "white" }}>
+            <TwitterIcon color="primary" />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up

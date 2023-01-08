@@ -1,11 +1,11 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import "./home.css"
+import "./home.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import TwitterIcon from '@mui/icons-material/Twitter';
+import TwitterIcon from "@mui/icons-material/Twitter";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -14,11 +14,10 @@ import { useContext } from "react";
 import { GlobalContext } from "../context/Context";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import {Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const theme = createTheme();
 export default function SignIn() {
-    let { state, dispatch } = useContext(GlobalContext);
-    const [result, setresult] = useState('')
+  let { state, dispatch } = useContext(GlobalContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -34,17 +33,15 @@ export default function SignIn() {
         }
       );
       dispatch({
-                type: "USER_LOGIN",
-                payload: response.data.profile,
-              });
-        // toast.success("signin successful")
-
+        type: "USER_LOGIN",
+        payload: response.data.profile,
+      });
+      // toast.success("signin successful")
     } catch (error) {
-      toast.error(error.response.data.message)
-
+      toast.error(error.response.data.message);
     }
   };
-    return (
+  return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -56,11 +53,8 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h5">
-            {result}
-          </Typography>
-          <Avatar sx={{ m: 1, bgcolor: "white",}}>
-            <TwitterIcon  color="primary"/>
+          <Avatar sx={{ m: 1, bgcolor: "white" }}>
+            <TwitterIcon color="primary" />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -101,13 +95,19 @@ export default function SignIn() {
               Sign In
             </Button>
             <br />
-            <Link className="forgetbtn" style={{width:'100%'}} to={`/forgetPassword`}>Forget Password</Link>
+            <Link
+              className="forgetbtn"
+              style={{ width: "100%" }}
+              to={`/forgetPassword`}
+            >
+              Forget Password
+            </Link>
             {/* <Button
               // fullWidth
               variant="contained"
               sx={{ mt: 1, mb: 2 }}
             > */}
-              {/* </Button> */}
+            {/* </Button> */}
           </Box>
         </Box>
       </Container>

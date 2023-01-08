@@ -81,36 +81,34 @@ function Profile() {
 
   const handleClose = () => {
     setOpen(false);
-    console.log("aaaaaa");
   };
   const change_password = async (event) => {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
+    try {
+      const data = new FormData(event.currentTarget);
 
-    if (data.get("new_password") == data.get("confirm_password")) {
-      try {
-        let response = await axios.post(
-          `${state.baseUrl}/change_password`,
-          {
-            current_password: data.get("current_password"),
-            new_password: data.get("new_password"),
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        toast.success(response.data.message)
-      } catch (error) {
-        toast.error(error.response.data.message);
-        return;
+      if (data.get("new_password") != data.get("confirm_password")) {
+        toast.error("password does'nt match")
+        throw new Error("password does'nt match");
       }
-    } else {
-      toast.error("password does'nt match");
+      let response = await axios.post(
+        `${state.baseUrl}/change_password`,
+        {
+          current_password: data.get("current_password"),
+          new_password: data.get("new_password"),
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success(response.data.message);
+      setOpen(false);
+    } catch (error) {
+      toast.error('Incorrect password');
       return;
     }
-
-  }
+  };
   useEffect(() => {
     Alltweet();
     console.log("profile gaya");

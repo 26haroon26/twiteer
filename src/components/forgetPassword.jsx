@@ -13,12 +13,14 @@ import Container from "@mui/material/Container";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {useNavigate} from "react-router-dom";
 
 const theme = createTheme();
 
 function ForgetPassword() {
   let { state, dispatch } = useContext(GlobalContext);
   const [isotpSent, setisotpSent] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -60,9 +62,10 @@ function ForgetPassword() {
       );
       console.log(data);
       setisotpSent(!isotpSent);
-      //   toast.success(response.data.message);
+        toast.success(response.data.message);
+        navigate('/signin');
     } catch (error) {
-      //   toast.error(error.response.data.message);
+        toast.error(error.response.data.message);
     }
   };
   return (
@@ -95,6 +98,7 @@ function ForgetPassword() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                type={'email'}
               />
               
               <TextField
@@ -106,6 +110,7 @@ function ForgetPassword() {
                 name="otpNumber"
                 autoComplete="one-time-code"
                 autoFocus
+                type={'number'}
               />
              <TextField
                 margin="normal"
@@ -116,6 +121,7 @@ function ForgetPassword() {
                 name="password"
                 autoComplete="new-password"
                 autoFocus
+                type={'password'}
               />
               <Button
                 type="submit"
@@ -157,6 +163,7 @@ function ForgetPassword() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                type={'email'}
               />
 
               <Button
