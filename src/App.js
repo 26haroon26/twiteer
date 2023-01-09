@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { GlobalContext } from "./context/Context";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Home from "./components/home";
@@ -10,8 +10,15 @@ import Signup from "./components/signup";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Box from "@mui/material/Box";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import Collapse from "@mui/material/Collapse";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 
 function App() {
+  const [open, setOpen] = useState(true);
   let { state, dispatch } = useContext(GlobalContext);
 
   // const [fullName, setFullName] = useState("");
@@ -32,16 +39,34 @@ function App() {
       console.log("error", err);
     }
   };
+  const verifyEmail = () => {
+    if (state?.user?.isVerified) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  };
+  const checkMyEmail = async () => {
+    console.log("abcf");
+    try {
+      let response = await axios.post(
+        `${state.baseUrl}/check_my_email`,
+        { email: state?.user?.email },
+        {
+          withCredentials: true,
+        }
+      );
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
   useEffect(() => {
     const getProfile = async () => {
       try {
-        let response = await axios.get(
-          `${state.baseUrl}/profile`,
-          {
-            withCredentials: true,
-          }
-        );
-
+        let response = await axios.get(`${state.baseUrl}/profile`, {
+          withCredentials: true,
+        });
+        verifyEmail();
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
@@ -123,6 +148,27 @@ function App() {
         <ul className="navBar">
           <li>
             {" "}
+            <Collapse in={open}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    onClick={checkMyEmail}
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                  >
+                    verify
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+                Please verify your Email
+              </Alert>
+            </Collapse>
+          </li>
+          <li>
+            {" "}
             <Link to={`/`}>Home</Link>{" "}
           </li>
           <li>
@@ -175,18 +221,19 @@ function App() {
         >
         </div>
       ) : null} */}
+
       <ToastContainer
-       position="bottom-center"
-       autoClose={5000}
-       hideProgressBar={false}
-       newestOnTop={false}
-       closeOnClick
-       rtl={false}
-       pauseOnFocusLoss
-       draggable
-       pauseOnHover
-       theme="light"
-     />
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }
