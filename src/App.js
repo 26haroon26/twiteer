@@ -39,34 +39,34 @@ function App() {
       console.log("error", err);
     }
   };
-  const verifyEmail = () => {
-    if (state?.user?.isVerified) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  };
-  const checkMyEmail = async () => {
-    console.log("abcf");
-    try {
-      let response = await axios.post(
-        `${state.baseUrl}/check_my_email`,
-        { email: state?.user?.email },
-        {
-          withCredentials: true,
-        }
-      );
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
+//   const verifyEmail = () => {
+//     if (state?.user?.isVerified) {
+//       setOpen(true);
+//     } else {
+//       setOpen(false);
+//     }
+//   };
+//   const checkMyEmail = async () => {
+//     console.log("abcf");
+//     try {
+//       let response = await axios.post(
+//         `${state.baseUrl}/check_my_email`,
+//         { email: state?.user?.email },
+//         {
+//           withCredentials: true,
+//         }
+//       );
+//     } catch (err) {
+//       console.log("error", err);
+//     }
+//   };
   useEffect(() => {
     const getProfile = async () => {
       try {
         let response = await axios.get(`${state.baseUrl}/profile`, {
           withCredentials: true,
         });
-        verifyEmail();
+//         verifyEmail();
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
@@ -148,24 +148,24 @@ function App() {
         <ul className="navBar">
           <li>
             {" "}
-            <Collapse in={open}>
-              <Alert
-                severity="error"
-                action={
-                  <IconButton
-                    onClick={checkMyEmail}
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                  >
-                    verify
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                Please verify your Email
-              </Alert>
-            </Collapse>
+//             <Collapse in={open}>
+//               <Alert
+//                 severity="error"
+//                 action={
+//                   <IconButton
+//                     onClick={checkMyEmail}
+//                     aria-label="close"
+//                     color="inherit"
+//                     size="small"
+//                   >
+//                     verify
+//                   </IconButton>
+//                 }
+//                 sx={{ mb: 2 }}
+//               >
+//                 Please verify your Email
+//               </Alert>
+//             </Collapse>
           </li>
           <li>
             {" "}
