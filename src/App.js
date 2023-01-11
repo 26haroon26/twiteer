@@ -41,9 +41,11 @@ function App() {
   };
   const verifyEmail = () => {
     if (state?.user?.isVerified) {
-      setOpen(false);
-    } else {
       setOpen(true);
+      
+    } else {
+      setOpen(false);
+      
     }
   };
   const checkMyEmail = async () => {
