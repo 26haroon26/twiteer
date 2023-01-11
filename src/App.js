@@ -42,6 +42,7 @@ function App() {
   const verifyEmail = () => {
     if (state?.user?.isVerified) {
       setOpen(true);
+      console.log(state?.user)
       
     } else {
       setOpen(false);
