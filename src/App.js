@@ -39,16 +39,7 @@ function App() {
       console.log("error", err);
     }
   };
-  const verifyEmail = () => {
-    if (state?.user?.isVerified) {
-      setOpen(true);
-      console.log(state?.user)
-      
-    } else {
-      setOpen(false);
-      
-    }
-  };
+
   const checkMyEmail = async () => {
     console.log("abcf");
     try {
@@ -72,8 +63,13 @@ function App() {
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
-        });
-        verifyEmail();
+        }
+        );
+        if (response?.data?.data?.isVerified) {
+          setOpen(true);
+        } else {
+          setOpen(false);
+        }
       } catch (error) {
         dispatch({
           type: "USER_LOGOUT",

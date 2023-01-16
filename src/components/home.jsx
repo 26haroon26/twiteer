@@ -4,25 +4,30 @@ import axios from "axios";
 import Search from "./search";
 import { GlobalContext } from "../context/Context";
 import { toast } from "react-toastify";
-
+import InfiniteScroll from 'react-infinite-scroller';
 function Home() {
   let { state, dispatch } = useContext(GlobalContext);
 
   const [posttext, setposttext] = useState("");
-  const [getData, setgetData] = useState();
+  const [getData, setgetData] = useState([]);
   const [istrue, setistrue] = useState(false);
   const [isEdit, setisEdit] = useState(false);
+  const [eof, setEof] = useState(false);
   const [Editing, setEditing] = useState({
     editing_id: null,
     editingtext: "",
   });
   const Alltweet = async () => {
+    if (eof) return;
     try {
-      const response = await axios
-        .get(`${state.baseUrl}/tweetFeed`)
-        .then((response) => {
-          setgetData(response.data.data);
-        });
+      const response = await axios.get(
+        `${state.baseUrl}/tweetFeed?page=${getData.length}`
+      );
+      
+      if (response.data.data.length === 0) setEof(true);
+      setgetData((prev) => {
+        return [...prev, ...response.data.data];
+      });
     } catch (err) {
       console.log("err", err);
     }
@@ -86,72 +91,83 @@ function Home() {
           />
           <input type="submit" className="button" value="SetPost" />
         </form>
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={Alltweet}
+            hasMore={!eof}
+            loader={
+              <div className="loader" key={0}>
+                Loading ...
+              </div>
+            }
+          >
         <div className="body">
-          <div className="flex">
-            {getData?.map((eachPost, i) => {
-              return (
-                <div className="post" key={i}>
-                  <div className="postText">
-                    <p className="overflow">
-                      {isEdit && eachPost._id === Editing.editing_id
-                        ? null
-                        : `_id :` + eachPost?._id}
-                    </p>
+            <div className="flex">
+              {getData?.map((eachPost, i) => {
+                return (
+                  <div className="post" key={i}>
+                    <div className="postText">
+                      <p className="overflow">
+                        {isEdit && eachPost._id === Editing.editing_id
+                          ? null
+                          : `_id :` + eachPost?._id}
+                      </p>
 
-                    <h3 className="postDescr overflow">
-                      {isEdit && eachPost._id === Editing.editing_id ? (
-                        <form className="NextForm" onSubmit={UpdatePost}>
-                          <input
-                            type="text"
-                            className="input"
-                            defaultValue={eachPost.text}
-                            onChange={(e) => {
-                              setEditing({
-                                ...Editing,
-                                editingtext: e.target.value,
-                              });
-                            }}
-                            placeholder="Please Enter Updated text"
-                          />
-                          <input
-                            type="submit"
-                            className="button next"
-                            value="Update"
-                          />
-                        </form>
-                      ) : (
-                        `Text :` + eachPost?.text
-                      )}
-                    </h3>
-                    <div style={{ margin: "10px auto" }}>
-                      <button
-                        className="button"
-                        onClick={() => {
-                          DeletePost(eachPost?._id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="button"
-                        onClick={() => {
-                          setEditing({
-                            editing_id: eachPost?._id,
-                            editingtext: eachPost?.name,
-                          });
-                          setisEdit(!isEdit);
-                        }}
-                      >
-                        Edit
-                      </button>
+                      <h3 className="postDescr overflow">
+                        {isEdit && eachPost._id === Editing.editing_id ? (
+                          <form className="NextForm" onSubmit={UpdatePost}>
+                            <input
+                              type="text"
+                              className="input"
+                              defaultValue={eachPost.text}
+                              onChange={(e) => {
+                                setEditing({
+                                  ...Editing,
+                                  editingtext: e.target.value,
+                                });
+                              }}
+                              placeholder="Please Enter Updated text"
+                            />
+                            <input
+                              type="submit"
+                              className="button next"
+                              value="Update"
+                            />
+                          </form>
+                        ) : (
+                          `Text :` + eachPost?.text
+                        )}
+                      </h3>
+                      <div style={{ margin: "10px auto" }}>
+                        <button
+                          className="button"
+                          onClick={() => {
+                            DeletePost(eachPost?._id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                        <button
+                          className="button"
+                          onClick={() => {
+                            setEditing({
+                              editing_id: eachPost?._id,
+                              editingtext: eachPost?.name,
+                            });
+                            setisEdit(!isEdit);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          <Search className="newcomponent" />
+                );
+              })}
+            </div>
+            <Search className="newcomponent" />
         </div>
+          </InfiniteScroll>
       </div>
     </>
   );
