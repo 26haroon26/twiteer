@@ -42,8 +42,11 @@ function App() {
   const verifyEmail = () => {
     if (state?.user?.isVerified) {
       setOpen(true);
+      console.log(state?.user)
+      
     } else {
       setOpen(false);
+      
     }
   };
   const checkMyEmail = async () => {
@@ -66,11 +69,11 @@ function App() {
         let response = await axios.get(`${state.baseUrl}/profile`, {
           withCredentials: true,
         });
-        verifyEmail();
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
         });
+        verifyEmail();
       } catch (error) {
         dispatch({
           type: "USER_LOGOUT",
