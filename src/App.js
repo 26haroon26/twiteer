@@ -39,6 +39,7 @@ function App() {
       console.log("error", err);
     }
   };
+  let verifyChecked;
 
   const checkMyEmail = async () => {
     console.log("abcf");
@@ -63,13 +64,8 @@ function App() {
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
-        }
-        );
-        if (response?.data?.data?.isVerified) {
-          setOpen(true);
-        } else {
-          setOpen(false);
-        }
+        });
+        verifyChecked = response?.data?.data?.isVerified;
       } catch (error) {
         dispatch({
           type: "USER_LOGOUT",
@@ -81,6 +77,11 @@ function App() {
     getProfile();
   }, []);
 
+  if (response?.data?.data?.isVerified) {
+    setOpen(true);
+  } else {
+    setOpen(false);
+  }
   // axios intercaption js se hr request me withCredentials true ho jae ga sb me alg alg nahi lgana pare ga
 
   useEffect(() => {
