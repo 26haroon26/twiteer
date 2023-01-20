@@ -4,11 +4,13 @@ import axios from "axios";
 import Search from "./search";
 import { GlobalContext } from "../context/Context";
 import { toast } from "react-toastify";
-import InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from "react-infinite-scroller";
+
 function Home() {
   let { state, dispatch } = useContext(GlobalContext);
 
-  const [posttext, setposttext] = useState("");
+  // const [posttext, setposttext] = useState("");
+  const [preview, setPreview] = useState(null);
   const [getData, setgetData] = useState([]);
   const [istrue, setistrue] = useState(false);
   const [isEdit, setisEdit] = useState(false);
@@ -17,13 +19,14 @@ function Home() {
     editing_id: null,
     editingtext: "",
   });
+
   const Alltweet = async () => {
     if (eof) return;
     try {
       const response = await axios.get(
         `${state.baseUrl}/tweetFeed?page=${getData.length}`
       );
-      
+
       if (response.data.data.length === 0) setEof(true);
       setgetData((prev) => {
         return [...prev, ...response.data.data];
@@ -35,14 +38,32 @@ function Home() {
 
   const SavePost = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`${state.baseUrl}/tweet`, {
-        text: posttext,
+
+    let fileInput = document.getElementById("image");
+    let textInput = document.getElementById("text");
+    console.log("fileInput: ", fileInput.files[0]);
+
+    let formData = new FormData();
+
+    formData.append("myFile", fileInput.files[0]);
+    formData.append("text", textInput.value);
+    console.log(textInput);
+    console.log(fileInput.files[0]);
+
+    console.log(formData.get("text"));
+
+    axios({
+      method: "post",
+      url: `${state.baseUrl}/tweet`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then((res) => {
+        setistrue(!istrue);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
       });
-      setistrue(!istrue);
-    } catch (err) {
-      toast.error(err.response.data.message);
-    }
   };
   const DeletePost = async (post_id) => {
     try {
@@ -85,23 +106,36 @@ function Home() {
             className="input"
             type="text"
             placeholder="tweet text"
+            name="text"
+            id="text"
+          />
+          <input
+            className="input"
+            type="file"
+            name="image"
+            id="image"
             onChange={(e) => {
-              setposttext(e.target.value);
+              var url = URL.createObjectURL(e.currentTarget.files[0]);
+              setPreview(url);
             }}
           />
+
           <input type="submit" className="button" value="SetPost" />
         </form>
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={Alltweet}
-            hasMore={!eof}
-            loader={
-              <div className="loader" key={0}>
-                Loading ...
-              </div>
-            }
-          >
-        <div className="body">
+        <div style={{ textAlign: "center" }}>
+          <img width={300} src={preview} alt="" />
+        </div>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={Alltweet}
+          hasMore={!eof}
+          loader={
+            <div className="loader" key={0}>
+              Loading ...
+            </div>
+          }
+        >
+          <div className="body">
             <div className="flex">
               {getData?.map((eachPost, i) => {
                 return (
@@ -110,9 +144,14 @@ function Home() {
                       <p className="overflow">
                         {isEdit && eachPost._id === Editing.editing_id
                           ? null
-                          : `_id :` + eachPost?._id}
+                          : eachPost?.owner.firstName}
                       </p>
-
+                      <p className="overflow">
+                        {isEdit && eachPost._id === Editing.editing_id
+                          ? null
+                          : eachPost?.text}
+                      </p>
+                      <img src={eachPost.imageUrl} alt="" />
                       <h3 className="postDescr overflow">
                         {isEdit && eachPost._id === Editing.editing_id ? (
                           <form className="NextForm" onSubmit={UpdatePost}>
@@ -166,8 +205,8 @@ function Home() {
               })}
             </div>
             <Search className="newcomponent" />
-        </div>
-          </InfiniteScroll>
+          </div>
+        </InfiniteScroll>
       </div>
     </>
   );

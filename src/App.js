@@ -10,15 +10,13 @@ import Signup from "./components/signup";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
-import Button from "@mui/material/Button";
-import CloseIcon from "@mui/icons-material/Close";
+
 
 function App() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   let { state, dispatch } = useContext(GlobalContext);
 
   // const [fullName, setFullName] = useState("");
@@ -39,7 +37,6 @@ function App() {
       console.log("error", err);
     }
   };
-  let verifyChecked;
 
   const checkMyEmail = async () => {
     console.log("abcf");
@@ -55,6 +52,7 @@ function App() {
       console.log("error", err);
     }
   };
+  
   useEffect(() => {
     const getProfile = async () => {
       try {
@@ -64,8 +62,9 @@ function App() {
         dispatch({
           type: "USER_LOGIN",
           payload: response.data,
-        });
-        verifyChecked = response?.data?.data?.isVerified;
+        }
+        );
+      
       } catch (error) {
         dispatch({
           type: "USER_LOGOUT",
@@ -77,11 +76,6 @@ function App() {
     getProfile();
   }, []);
 
-  if (response?.data?.data?.isVerified) {
-    setOpen(true);
-  } else {
-    setOpen(false);
-  }
   // axios intercaption js se hr request me withCredentials true ho jae ga sb me alg alg nahi lgana pare ga
 
   useEffect(() => {
@@ -113,34 +107,6 @@ function App() {
     );
   }, []);
 
-  // useEffect(() => {
-
-  //   axios.get(`${state.baseUrl}/profile`, {
-  //     withCredentials: true
-  //   })
-  //     .then((res) => {
-  //       console.log("res: ", res.data);
-
-  //       if (res.data.email) {
-
-  //         dispatch({
-  //           type: "USER_LOGIN",
-  //           payload: {
-  //             name: res.data.name,
-  //             email: res.data.email,
-  //             _id: res.data._id
-  //           }
-  //         })
-  //       } else {
-  //         dispatch({ type: "USER_LOGOUT" })
-  //       }
-  //     }).catch((e) => {
-  //       dispatch({ type: "USER_LOGOUT" })
-  //     })
-
-  //   return () => {
-  //   };
-  // }, []);
 
   return (
     <div>
