@@ -10,7 +10,7 @@ let data = {
   baseUrl:
     window.location.href.split(":")[0] === "http"
       ? "http://localhost:4000/api/v1"
-      : "twiteerserver-production.up.railway.app/api/v1",
+      : "https://erin-bunny-sock.cyclic.app/api/v1",
 };
 
 export default function ContextProvider({ children }) {
